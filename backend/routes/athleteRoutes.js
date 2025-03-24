@@ -8,4 +8,4 @@ router.post('/', athleteController.createAthlete);
 router.put('/:id', athleteController.updateAthlete);
 router.delete('/:id', athleteController.deleteAthlete);
 
-module.exports = router;
+module.exports = router;    
