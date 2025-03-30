@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
 import Table from '../components/Table';
 import { athleteService } from '../services/api';
+import Card from '../components/Card';
 
 const Athletes = () => {
   const [athletes, setAthletes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -15,18 +16,52 @@ const Athletes = () => {
         const data = await athleteService.getAll();
         setAthletes(data);
       } catch (err) {
-        if (err.response?.status === 401) navigate('/login');
+        setError(err.message);
+        if (err.response?.status === 401) {
+          navigate('/login');
+        }
+      } finally {
+        setLoading(false);
       }
     };
+    
     fetchAthletes();
   }, [navigate]);
 
+  const handleRowClick = (athlete) => {
+    navigate(`/athletes/${athlete.id}`);
+  };
+
+  const columns = athletes.length > 0 ? [
+    'id', 
+    'name', 
+    'age', 
+    'gender', 
+    'category'
+  ] : [];
+
   return (
-    <div>
-      <Navbar />
-      <h1>Gestión de Atletas</h1>
-      <Table data={athletes} />
-      <Footer />
+    <div className="container py-8">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Gestión de Atletas</h1>
+        <button className="btn btn-primary">
+          + Nuevo Atleta
+        </button>
+      </div>
+      
+      <Card>
+        {loading ? (
+          <div className="text-center py-8">Cargando atletas...</div>
+        ) : error ? (
+          <div className="alert alert-error">{error}</div>
+        ) : (
+          <Table 
+            data={athletes} 
+            columns={columns} 
+            onRowClick={handleRowClick}
+          />
+        )}
+      </Card>
     </div>
   );
 };

@@ -1,24 +1,34 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const Navbar = () => {
+const Navbar = ({ isAuthenticated }) => {
   return (
-    <nav className="flex justify-between items-center">
-      <div className="text-xl font-bold text-white">
-        Torneos Deportivos
+    <header className="navbar">
+      <div className="container">
+        <div className="flex items-center justify-between">
+          <Link to="/" className="nav-logo">Torneos Deportivos</Link>
+          
+          <nav className="nav-links">
+            <Link to="/" className="nav-link">Inicio</Link>
+            <Link to="/athletes" className="nav-link">Atletas</Link>
+            <Link to="/competitions" className="nav-link">Competencias</Link>
+            <Link to="/results" className="nav-link">Resultados</Link>
+            {isAuthenticated && <Link to="/dashboard" className="nav-link">Dashboard</Link>}
+          </nav>
+          
+          <div className="nav-actions">
+            {isAuthenticated ? (
+              <Link to="/profile" className="btn btn-outline">Perfil</Link>
+            ) : (
+              <>
+                <Link to="/login" className="btn btn-outline">Iniciar sesión</Link>
+                <Link to="/register" className="btn btn-primary">Registrarse</Link>
+              </>
+            )}
+          </div>
+        </div>
       </div>
-      <div className="flex space-x-6">
-        <Link to="/" className="hover:text-blue-300 transition">Inicio</Link>
-        <Link to="/athletes" className="hover:text-blue-300 transition">Atletas</Link>
-        <Link to="/results" className="hover:text-blue-300 transition">Resultados</Link>
-        <Link to="/profile" className="hover:text-blue-300 transition">Perfil</Link>
-      </div>
-      <div>
-        <Link to="/login" className="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-md text-white transition">
-          Login
-        </Link>
-      </div>
-    </nav>
+    </header>
   );
 };
 
