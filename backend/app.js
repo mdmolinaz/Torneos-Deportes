@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const authRoutes = require('./routes/authRoutes');
 const athleteRoutes = require('./routes/athleteRoutes');
 const competitionRoutes = require('./routes/competitionRoutes');
@@ -6,6 +7,13 @@ const timeRoutes = require('./routes/timeRoutes');
 const authMiddleware = require('./middlewares/authMiddleware');
 
 const app = express();
+
+// Configuración de CORS
+app.use(cors({
+    origin: 'http://localhost:5173', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
 
 app.use(express.json());
 

@@ -19,7 +19,7 @@ const authController = {
       if (!user || user.password !== password) {
         return res.status(401).json({ error: 'Credenciales inválidas' });
       }
-      const token = jwt.sign({ userId: user.id }, 'secret_key', { expiresIn: '1h' });
+      const token = jwt.sign({ userId: user.id }, '1234567890', { expiresIn: '1h' });
       res.json({ token });
     } catch (error) {
       res.status(500).json({ error: 'Error al iniciar sesión' });

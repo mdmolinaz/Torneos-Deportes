@@ -10,7 +10,7 @@ const authMiddleware = (req, res, next) => {
 
   try {
     // Verificar el token usando tu clave secreta (debe coincidir con la usada en login)
-    const decoded = jwt.verify(token, 'tu_clave_secreta'); // Reemplaza con una clave segura
+    const decoded = jwt.verify(token, '1234567890'); // Reemplaza con una clave segura
     req.user = decoded; // Guardar los datos del usuario en la request
     next(); // Continuar con la siguiente función (controller)
   } catch (error) {
