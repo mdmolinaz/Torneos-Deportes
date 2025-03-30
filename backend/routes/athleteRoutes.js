@@ -1,11 +1,12 @@
 const express = require('express');
+const router = express.Router();
+const authMiddleware = require('../middlewares/authMiddleware');
 const athleteController = require('../controllers/athleteController');
 
-const router = express.Router();
+// Todas las rutas requieren autenticación
+router.get('/', authMiddleware, athleteController.getAllAthletes);
+router.post('/', authMiddleware, athleteController.createAthlete);
+router.put('/:id', authMiddleware, athleteController.updateAthlete);
+router.delete('/:id', authMiddleware, athleteController.deleteAthlete);
 
-router.get('/', athleteController.getAllAthletes);
-router.post('/', athleteController.createAthlete);
-router.put('/:id', athleteController.updateAthlete);
-router.delete('/:id', athleteController.deleteAthlete);
-
-module.exports = router;    
+module.exports = router;

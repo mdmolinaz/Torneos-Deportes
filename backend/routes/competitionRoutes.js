@@ -1,11 +1,12 @@
 const express = require('express');
+const router = express.Router();
+const authMiddleware = require('../middlewares/authMiddleware');
 const competitionController = require('../controllers/competitionController');
 
-const router = express.Router();
-
-router.get('/', competitionController.getAllCompetitions);
-router.post('/', competitionController.createCompetition);
-router.put('/:id', competitionController.updateCompetition);
-router.delete('/:id', competitionController.deleteCompetition);
+// Rutas protegidas
+router.get('/', authMiddleware, competitionController.getAllCompetitions);
+router.post('/', authMiddleware, competitionController.createCompetition);
+router.put('/:id', authMiddleware, competitionController.updateCompetition);
+router.delete('/:id', authMiddleware, competitionController.deleteCompetition);
 
 module.exports = router;

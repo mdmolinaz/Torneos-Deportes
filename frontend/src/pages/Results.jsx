@@ -1,22 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Table from '../components/Table';
+import { timeService } from '../services/api';
 
 const Results = () => {
   const [results, setResults] = useState([]);
+  const navigate = useNavigate();
 
-  // Simulación de datos (reemplazar con llamada a la API)
   useEffect(() => {
     const fetchResults = async () => {
-      const data = [
-        { id: 1, athlete: 'Juan Pérez', competition: 'Natación 100m', time: '00:58:23', category: 'Natación' },
-        { id: 2, athlete: 'Ana Gómez', competition: 'Atletismo 5k', time: '00:25:45', category: 'Atletismo' },
-      ];
-      setResults(data);
+      try {
+        const times = await timeService.getAll();
+        // Aquí puedes enriquecer los datos con información de atletas/competencias si es necesario
+        setResults(times);
+      } catch (err) {
+        if (err.response?.status === 401) navigate('/login');
+      }
     };
     fetchResults();
-  }, []);
+  }, [navigate]);
 
   return (
     <div>

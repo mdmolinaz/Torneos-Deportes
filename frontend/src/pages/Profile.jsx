@@ -1,25 +1,38 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Table from '../components/Table';
+import { timeService } from '../services/api';
 
 const Profile = () => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({ name: 'Usuario', email: 'user@example.com' });
   const [times, setTimes] = useState([]);
+  const navigate = useNavigate();
 
-  // Simulación de datos (reemplazar con llamada a la API)
   useEffect(() => {
     const fetchProfile = async () => {
-      const userData = { id: 1, name: 'Juan Pérez', email: 'juan@example.com' };
-      const timesData = [
-        { id: 1, competition: 'Natación 100m', time: '00:58:23' },
-        { id: 2, competition: 'Atletismo 5k', time: '00:25:45' },
-      ];
-      setUser(userData);
-      setTimes(timesData);
+      try {
+        // 1. Obtener datos del usuario desde localStorage (o API real)
+        const storedUser = localStorage.getItem('user');
+        const userData = storedUser ? JSON.parse(storedUser) : { name: 'Usuario', email: 'user@example.com' };
+        
+        // 2. Obtener tiempos desde el backend
+        const timesData = await timeService.getAll();
+        
+        // 3. Actualizar estados
+        setUser(userData);
+        setTimes(timesData.filter(time => time.athlete_id === userData.id)); // Filtra por el ID del usuario logueado
+      } catch (err) {
+        if (err.response?.status === 401) {
+          navigate('/login');
+        } else {
+          console.error('Error fetching profile:', err);
+        }
+      }
     };
     fetchProfile();
-  }, []);
+  }, [navigate]);
 
   return (
     <div>

@@ -1,11 +1,12 @@
 const express = require('express');
+const router = express.Router();
+const authMiddleware = require('../middlewares/authMiddleware');
 const timeController = require('../controllers/timeController');
 
-const router = express.Router();
-
-router.get('/', timeController.getAllTimes);
-router.post('/', timeController.createTime);
-router.put('/:id', timeController.updateTime);
-router.delete('/:id', timeController.deleteTime);
+// Rutas protegidas
+router.get('/', authMiddleware, timeController.getAllTimes);
+router.post('/', authMiddleware, timeController.createTime);
+router.put('/:id', authMiddleware, timeController.updateTime);
+router.delete('/:id', authMiddleware, timeController.deleteTime);
 
 module.exports = router;
