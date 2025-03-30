@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -10,7 +10,6 @@ import Profile from './pages/Profile';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 
-// Componente PrivateRoute actualizado
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
   const location = useLocation();
@@ -22,30 +21,33 @@ const PrivateRoute = ({ children }) => {
   return children;
 };
 
-const AppRoutes = () => {
+const Layout = ({ children }) => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
-      <Route path="/athletes" element={<PrivateRoute><Athletes /></PrivateRoute>} />
-      <Route path="/results" element={<PrivateRoute><Results /></PrivateRoute>} />
-      <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
-      <Route path="*" element={<Navigate to="/" replace />} /> {/* Ruta de fallback */}
-    </Routes>
+    <>
+      <Navbar />
+      <main className="container mx-auto px-4 py-8">{children}</main>
+      <Footer />
+    </>
   );
 };
 
 const App = () => {
   return (
     <Router>
-      <Navbar />
-      <AppRoutes />
-      <Footer />
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+          <Route path="/athletes" element={<PrivateRoute><Athletes /></PrivateRoute>} />
+          <Route path="/results" element={<PrivateRoute><Results /></PrivateRoute>} />
+          <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Layout>
     </Router>
   );
 };
 
-// Exportación por defecto añadida
 export default App;
