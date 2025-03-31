@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { authService } from '../services/api';
+import Button from '../components/Button';
 import Card from '../components/Card';
 
 const Login = ({ onLogin }) => {
@@ -28,46 +29,56 @@ const Login = ({ onLogin }) => {
       onLogin();
       navigate('/dashboard');
     } catch (err) {
-      setError(err.response?.data?.message || 'Credenciales incorrectas');
+      setError(err.message || 'Credenciales incorrectas');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="container py-12">
-      <div className="max-w-md mx-auto">
-        <Card title="Iniciar sesión">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+            Iniciar sesión
+          </h2>
+        </div>
+        
+        <Card className="px-8 py-6">
           {error && (
-            <div className="alert alert-error mb-4">
+            <div className="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
               {error}
             </div>
           )}
           
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="form-group">
-              <label htmlFor="email" className="form-label">Correo electrónico</label>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                Correo electrónico
+              </label>
               <input
                 type="email"
                 id="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="form-control"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 placeholder="tucorreo@ejemplo.com"
                 required
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="password" className="form-label">Contraseña</label>
+            <div>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+                Contraseña
+              </label>
               <input
                 type="password"
                 id="password"
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="form-control"
+                className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 placeholder="••••••••"
                 required
               />
@@ -79,29 +90,42 @@ const Login = ({ onLogin }) => {
                   type="checkbox"
                   id="remember"
                   name="remember"
-                  className="mr-2"
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <label htmlFor="remember">Recordarme</label>
+                <label htmlFor="remember" className="ml-2 block text-sm text-gray-900">
+                  Recordarme
+                </label>
               </div>
               
-              <Link to="/forgot-password" className="text-sm text-primary">
+              <Link to="/forgot-password" className="text-sm text-blue-600 hover:text-blue-500">
                 ¿Olvidaste tu contraseña?
               </Link>
             </div>
 
-            <button 
-              type="submit" 
-              disabled={isLoading}
-              className="btn btn-primary w-full"
-            >
-              {isLoading ? 'Cargando...' : 'Iniciar sesión'}
-            </button>
+            <div>
+              <Button
+                type="submit" 
+                disabled={isLoading}
+                variant="primary"
+                className="w-full flex justify-center py-2 px-4"
+              >
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Procesando...
+                  </>
+                ) : 'Iniciar sesión'}
+              </Button>
+            </div>
           </form>
           
-          <div className="mt-4 text-center">
-            <p className="text-gray-600">
+          <div className="mt-6 text-center">
+            <p className="text-sm text-gray-600">
               ¿No tienes una cuenta?{' '}
-              <Link to="/register" className="text-primary font-medium">
+              <Link to="/register" className="font-medium text-blue-600 hover:text-blue-500">
                 Regístrate
               </Link>
             </p>

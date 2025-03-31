@@ -16,7 +16,7 @@ const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    // Verificar autenticación al cargar la app
+    // Verificar si hay un token almacenado al cargar la aplicación
     const token = localStorage.getItem('token');
     setIsAuthenticated(!!token);
   }, []);
@@ -36,14 +36,25 @@ const App = () => {
       <div className="flex flex-col min-h-screen">
         <Navbar isAuthenticated={isAuthenticated} />
         
-        <main className="flex-grow">
+        <main className="flex-grow container mx-auto px-4 py-8">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route 
               path="/login" 
-              element={<Login onLogin={handleLogin} />} 
+              element={
+                isAuthenticated ? 
+                  <Navigate to="/dashboard" /> : 
+                  <Login onLogin={handleLogin} />
+              } 
             />
-            <Route path="/register" element={<Register />} />
+            <Route 
+              path="/register" 
+              element={
+                isAuthenticated ? 
+                  <Navigate to="/dashboard" /> : 
+                  <Register />
+              } 
+            />
             
             {/* Rutas protegidas */}
             <Route 
@@ -55,7 +66,7 @@ const App = () => {
               } 
             />
             <Route 
-              path="/athletes" 
+              path="/athletes/*" 
               element={
                 isAuthenticated ? 
                   <Athletes /> : 
@@ -63,7 +74,7 @@ const App = () => {
               } 
             />
             <Route 
-              path="/competitions" 
+              path="/competitions/*" 
               element={
                 isAuthenticated ? 
                   <Competitions /> : 

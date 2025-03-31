@@ -1,6 +1,5 @@
 /* Variables de diseño */
 :root {
-  /* Colores */
   --primary: #4361ee;
   --primary-dark: #3a56d4;
   --primary-light: #e0e7ff;
@@ -14,54 +13,43 @@
   --gray: #64748b;
   --gray-light: #e2e8f0;
   --gray-lighter: #f1f5f9;
-  
-  /* Tipografía */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Roboto Mono', monospace;
-  
-  /* Espaciado */
   --space-xs: 0.25rem;
   --space-sm: 0.5rem;
   --space-md: 1rem;
   --space-lg: 1.5rem;
   --space-xl: 2rem;
   --space-2xl: 3rem;
-  
-  /* Bordes */
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
   --radius-full: 9999px;
-  
-  /* Sombras */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  
-  /* Tamaños */
   --max-width: 1200px;
   --header-height: 4rem;
-
-  /* Breakpoints */
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
   --breakpoint-lg: 1024px;
   --breakpoint-xl: 1280px;
 }
 
-/* Reset y estilos base */
-*,
-*::before,
-*::after {
+
+/* Reset completo */
+*, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  height: 100%;
 }
 
 body {
@@ -74,6 +62,14 @@ body {
   flex-direction: column;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Tipografía */
@@ -84,29 +80,16 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--dark);
 }
 
-h1 { 
-  font-size: 2rem; 
-  @media (min-width: 768px) {
-    font-size: 2.5rem;
-  }
-}
-h2 { 
-  font-size: 1.75rem;
-  @media (min-width: 768px) {
-    font-size: 2rem;
-  }
-}
-h3 { 
-  font-size: 1.5rem;
-  @media (min-width: 768px) {
-    font-size: 1.75rem;
-  }
-}
-h4 { 
-  font-size: 1.25rem;
-  @media (min-width: 768px) {
-    font-size: 1.5rem;
-  }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+h4 { font-size: 1.25rem; }
+
+@media (min-width: 768px) {
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.75rem; }
+  h4 { font-size: 1.5rem; }
 }
 
 p {
@@ -168,7 +151,7 @@ header {
   height: var(--header-height);
 }
 
-/* Navbar mejorada */
+/* Navbar */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -318,7 +301,7 @@ header {
   }
 }
 
-/* Footer mejorado */
+/* Footer */
 .footer {
   background-color: var(--dark);
   color: white;
@@ -413,7 +396,7 @@ header {
   border-left: 4px solid var(--success);
 }
 
-/* Formularios mejorados */
+/* Formularios */
 .form-group {
   margin-bottom: var(--space-lg);
 }
@@ -455,7 +438,7 @@ header {
   }
 }
 
-/* Tablas mejoradas */
+/* Tablas */
 .table-container {
   overflow-x: auto;
   margin-bottom: var(--space-xl);
@@ -498,18 +481,6 @@ header {
 
 .table tr:hover {
   background-color: var(--primary-light);
-}
-
-/* Versión mobile para tablas */
-.table-mobile {
-  display: block;
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  .table-mobile {
-    display: table;
-  }
 }
 
 /* Alertas */
@@ -567,143 +538,55 @@ header {
   }
 }
 
-/* Flex utilities */
-.flex {
-  display: flex;
-}
-
-.flex-col {
-  flex-direction: column;
-}
+/* Utilidades */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-2 { gap: var(--space-sm); }
+.gap-4 { gap: var(--space-md); }
+.gap-6 { gap: var(--space-lg); }
+.p-2 { padding: var(--space-sm); }
+.p-4 { padding: var(--space-md); }
+.p-6 { padding: var(--space-lg); }
+.py-2 { padding-top: var(--space-sm); padding-bottom: var(--space-sm); }
+.py-4 { padding-top: var(--space-md); padding-bottom: var(--space-md); }
+.py-6 { padding-top: var(--space-lg); padding-bottom: var(--space-lg); }
+.mb-2 { margin-bottom: var(--space-sm); }
+.mb-4 { margin-bottom: var(--space-md); }
+.mb-6 { margin-bottom: var(--space-lg); }
+.text-sm { font-size: 0.875rem; }
+.text-base { font-size: 1rem; }
+.text-lg { font-size: 1.125rem; }
+.text-center { text-align: center; }
+.bg-white { background-color: white; }
+.bg-gray-50 { background-color: var(--gray-lighter); }
+.border { border: 1px solid var(--gray-light); }
+.rounded { border-radius: var(--radius-md); }
+.shadow { box-shadow: var(--shadow); }
 
 @media (min-width: 768px) {
   .md\:flex-row {
     flex-direction: row;
   }
-}
-
-.items-center {
-  align-items: center;
-}
-
-.justify-between {
-  justify-content: space-between;
-}
-
-.gap-2 {
-  gap: var(--space-sm);
-}
-
-.gap-4 {
-  gap: var(--space-md);
-}
-
-.gap-6 {
-  gap: var(--space-lg);
-}
-
-/* Spacing utilities */
-.p-2 {
-  padding: var(--space-sm);
-}
-
-.p-4 {
-  padding: var(--space-md);
-}
-
-.p-6 {
-  padding: var(--space-lg);
-}
-
-.py-2 {
-  padding-top: var(--space-sm);
-  padding-bottom: var(--space-sm);
-}
-
-.py-4 {
-  padding-top: var(--space-md);
-  padding-bottom: var(--space-md);
-}
-
-.py-6 {
-  padding-top: var(--space-lg);
-  padding-bottom: var(--space-lg);
-}
-
-.mb-2 {
-  margin-bottom: var(--space-sm);
-}
-
-.mb-4 {
-  margin-bottom: var(--space-md);
-}
-
-.mb-6 {
-  margin-bottom: var(--space-lg);
-}
-
-/* Text utilities */
-.text-sm {
-  font-size: 0.875rem;
-}
-
-.text-base {
-  font-size: 1rem;
-}
-
-.text-lg {
-  font-size: 1.125rem;
-}
-
-.text-center {
-  text-align: center;
-}
-
-/* Backgrounds */
-.bg-white {
-  background-color: white;
-}
-
-.bg-gray-50 {
-  background-color: var(--gray-lighter);
-}
-
-/* Border */
-.border {
-  border: 1px solid var(--gray-light);
-}
-
-.rounded {
-  border-radius: var(--radius-md);
-}
-
-/* Shadow */
-.shadow {
-  box-shadow: var(--shadow);
-}
-
-/* Responsive helpers */
-.mobile-only {
-  display: block;
-}
-
-@media (min-width: 768px) {
-  .mobile-only {
-    display: none;
+  .btn {
+    font-size: 1rem;
+  }
+  .form-label {
+    font-size: 1rem;
+  }
+  .form-control {
+    font-size: 1rem;
+  }
+  .alert {
+    font-size: 1rem;
+  }
+  .table {
+    font-size: 1rem;
   }
 }
 
-.desktop-only {
-  display: none;
-}
-
-@media (min-width: 768px) {
-  .desktop-only {
-    display: block;
-  }
-}
-
-/* Animations */
+/* Animaciones */
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -713,35 +596,7 @@ header {
   animation: fadeIn 0.3s ease-out;
 }
 
-/* Empty state */
-.empty-state {
-  text-align: center;
-  padding: var(--space-xl) 0;
-}
-
-.empty-state-icon {
-  font-size: 3rem;
-  margin-bottom: var(--space-md);
-  opacity: 0.6;
-}
-
-.empty-state-title {
-  font-size: 1.25rem;
-  margin-bottom: var(--space-sm);
-  color: var(--dark);
-}
-
-.empty-state-description {
-  color: var(--gray);
-  max-width: 400px;
-  margin: 0 auto var(--space-md);
-}
-
 /* Loading spinner */
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
 .spinner {
   display: inline-block;
   width: 1.5rem;
@@ -752,40 +607,11 @@ header {
   animation: spin 1s ease-in-out infinite;
 }
 
-/* Overlay */
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-/* Modal */
-.modal {
-  background-color: white;
-  border-radius: var(--radius-lg);
-  padding: var(--space-lg);
-  width: 90%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: var(--shadow-lg);
-}
-
-/* Responsive text sizes */
-@media (max-width: 768px) {
-  .text-responsive {
-    font-size: calc(1rem + 0.5vw);
-  }
-}
-
-/* Custom scrollbar */
+/* Scrollbar personalizada */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -802,4 +628,28 @@ header {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--primary);
+}.form-container {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.card-content > form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 1rem;
+}
+
+/* Fuerza visibilidad de inputs */
+input, select, textarea {
+  display: block !important;
+  width: 100% !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Elimina cualquier transformación que pueda estar ocultando elementos */
+.card {
+  transform: none !important;
+  opacity: 1 !important;
 }
