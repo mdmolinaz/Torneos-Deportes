@@ -11,11 +11,11 @@ const competitionController = {
   },
 
   createCompetition: async (req, res) => {
-    const { name, date, location } = req.body;
+    const { name, date, location, sport_type } = req.body;
     try {
       const [result] = await pool.query(
-        'INSERT INTO competitions (name, date, location) VALUES (?, ?, ?)',
-        [name, date, location]
+        'INSERT INTO competitions (name, date, location, sport_type) VALUES (?, ?, ?, ?)',
+        [name, date, location, sport_type]
       );
       res.status(201).json({ message: 'Competencia creada', id: result.insertId });
     } catch (error) {
@@ -25,11 +25,11 @@ const competitionController = {
 
   updateCompetition: async (req, res) => {
     const { id } = req.params;
-    const { name, date, location } = req.body;
+    const { name, date, location, sport_type } = req.body;
     try {
       await pool.query(
-        'UPDATE competitions SET name = ?, date = ?, location = ? WHERE id = ?',
-        [name, date, location, id]
+        'UPDATE competitions SET name = ?, date = ?, location = ?, sport_type = ? WHERE id = ?',
+        [name, date, location, sport_type, id]
       );
       res.json({ message: 'Competencia actualizada' });
     } catch (error) {
@@ -45,7 +45,7 @@ const competitionController = {
     } catch (error) {
       res.status(500).json({ error: 'Error al eliminar competencia' });
     }
-  },
+  }
 };
 
 module.exports = competitionController;

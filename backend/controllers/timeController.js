@@ -3,7 +3,12 @@ const pool = require('../config/db');
 const timeController = {
   getAllTimes: async (req, res) => {
     try {
-      const [rows] = await pool.query('SELECT * FROM times');
+      const [rows] = await pool.query(`
+        SELECT t.*, a.name as athlete_name, c.name as competition_name 
+        FROM times t
+        JOIN athletes a ON t.athlete_id = a.id
+        JOIN competitions c ON t.competition_id = c.id
+      `);
       res.json(rows);
     } catch (error) {
       res.status(500).json({ error: 'Error al obtener tiempos' });
@@ -46,6 +51,24 @@ const timeController = {
       res.status(500).json({ error: 'Error al eliminar tiempo' });
     }
   },
+
+  getWinnersByCompetition: async (req, res) => {
+    const { competition_id } = req.params;
+    try {
+      const [rows] = await pool.query(`
+          SELECT a.name, MIN(t.time_recorded) as best_time 
+          FROM times t
+          JOIN athletes a ON t.athlete_id = a.id
+          WHERE t.competition_id = ?
+          GROUP BY a.id
+          ORDER BY best_time ASC
+          LIMIT 3
+    `, [competitionId]);
+      res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener ganadores' });
+    }
+  }
 };
 
 module.exports = timeController;

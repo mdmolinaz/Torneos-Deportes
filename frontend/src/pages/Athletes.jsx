@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Table from '../components/Table';
 import { athleteService } from '../services/api';
+import Table from '../components/Table';
+import Button from '../components/Button';
 import Card from '../components/Card';
 
 const Athletes = () => {
@@ -17,47 +18,45 @@ const Athletes = () => {
         setAthletes(data);
       } catch (err) {
         setError(err.message);
-        if (err.response?.status === 401) {
-          navigate('/login');
-        }
       } finally {
         setLoading(false);
       }
     };
     
     fetchAthletes();
-  }, [navigate]);
+  }, []);
+
+  const handleCreate = () => {
+    navigate('/athletes/new');
+  };
 
   const handleRowClick = (athlete) => {
     navigate(`/athletes/${athlete.id}`);
   };
 
-  const columns = athletes.length > 0 ? [
-    'id', 
-    'name', 
-    'age', 
-    'gender', 
-    'category'
-  ] : [];
-
   return (
     <div className="container py-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold">Gestión de Atletas</h1>
-        <button className="btn btn-primary">
-          + Nuevo Atleta
-        </button>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Atletas</h1>
+        <Button onClick={handleCreate} variant="primary">
+          Nuevo Atleta
+        </Button>
       </div>
       
       <Card>
         {loading ? (
           <div className="text-center py-8">Cargando atletas...</div>
         ) : error ? (
-          <div className="alert alert-error">{error}</div>
+          <div className="text-red-500 text-center py-8">{error}</div>
         ) : (
           <Table 
-            data={athletes} 
-            columns={columns} 
+            data={athletes}
+            columns={[
+              { key: 'name', label: 'Nombre' },
+              { key: 'age', label: 'Edad' },
+              { key: 'gender', label: 'Género' },
+              { key: 'category_id', label: 'Categoría' }
+            ]}
             onRowClick={handleRowClick}
           />
         )}

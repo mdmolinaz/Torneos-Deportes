@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { competitionService } from '../services/api';
-import PageLayout from '../components/PageLayout';
-import Card from '../components/Card';
 import Table from '../components/Table';
-import LoadingSpinner from '../components/LoadingSpinner';
 import Button from '../components/Button';
-import EmptyState from '../components/EmptyState';
+import Card from '../components/Card';
 
 const Competitions = () => {
-  const navigate = useNavigate();
   const [competitions, setCompetitions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCompetitions = async () => {
@@ -21,107 +17,51 @@ const Competitions = () => {
         const data = await competitionService.getAll();
         setCompetitions(data);
       } catch (err) {
-        setError(err.message || 'Error al cargar competencias');
+        setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
+    
     fetchCompetitions();
   }, []);
 
-  const filteredCompetitions = competitions.filter(comp =>
-    comp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    comp.location.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleCreate = () => {
+    navigate('/competitions/new');
+  };
 
   const handleRowClick = (competition) => {
     navigate(`/competitions/${competition.id}`);
   };
 
-  if (loading) {
-    return (
-      <PageLayout title="Cargando competencias...">
-        <div className="flex justify-center py-12">
-          <LoadingSpinner size="lg" />
-        </div>
-      </PageLayout>
-    );
-  }
-
-  if (error) {
-    return (
-      <PageLayout title="Error">
-        <Card className="bg-red-50 border-red-200">
-          <div className="text-red-700">
-            <p className="font-medium">Error:</p>
-            <p>{error}</p>
-          </div>
-          <Button
-            onClick={() => window.location.reload()}
-            className="mt-4"
-            variant="primary"
-          >
-            Reintentar
-          </Button>
-        </Card>
-      </PageLayout>
-    );
-  }
-
   return (
-    <PageLayout
-      title="Competencias"
-      description="Administra todas las competencias deportivas"
-    >
-      <div className="space-y-6">
-        {/* Barra de búsqueda y acciones */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex-1">
-            <input
-              type="text"
-              placeholder="Buscar competencias..."
-              className="w-full p-2 border rounded-lg"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-          <Button
-            onClick={() => navigate('/competitions/new')}
-            variant="primary"
-            className="w-full sm:w-auto"
-          >
-            Nueva Competencia
-          </Button>
-        </div>
-
-        {/* Contenido principal */}
-        {filteredCompetitions.length === 0 ? (
-          <EmptyState
-            title="No hay competencias"
-            description={searchTerm ? "No se encontraron resultados para tu búsqueda" : "Aún no hay competencias registradas"}
-            actionText={searchTerm ? "Limpiar búsqueda" : "Crear primera competencia"}
-            onAction={() => searchTerm ? setSearchTerm('') : navigate('/competitions/new')}
-          />
-        ) : (
-          <Card>
-            <div className="overflow-x-auto">
-              <Table
-                data={filteredCompetitions}
-                columns={[
-                  { key: 'name', label: 'Nombre', className: 'font-medium' },
-                  { key: 'date', label: 'Fecha', type: 'date' },
-                  { key: 'location', label: 'Ubicación' },
-                  { key: 'actions', label: '', type: 'action' }
-                ]}
-                onRowClick={handleRowClick}
-                responsiveBreakpoint="640px"
-              />
-            </div>
-          </Card>
-        )}
+    <div className="container py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Competencias</h1>
+        <Button onClick={handleCreate} variant="primary">
+          Nueva Competencia
+        </Button>
       </div>
-    </PageLayout>
+      
+      <Card>
+        {loading ? (
+          <div className="text-center py-8">Cargando competencias...</div>
+        ) : error ? (
+          <div className="text-red-500 text-center py-8">{error}</div>
+        ) : (
+          <Table 
+            data={competitions}
+            columns={[
+              { key: 'name', label: 'Nombre' },
+              { key: 'date', label: 'Fecha', type: 'date' },
+              { key: 'location', label: 'Ubicación' },
+              { key: 'sport_type', label: 'Deporte' }
+            ]}
+            onRowClick={handleRowClick}
+          />
+        )}
+      </Card>
+    </div>
   );
 };
 

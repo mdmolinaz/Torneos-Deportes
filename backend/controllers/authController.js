@@ -1,30 +1,61 @@
-const User = require('../models/User');
-const jwt = require('jsonwebtoken');
+const pool = require('../config/db');
 
-const authController = {
-  register: async (req, res) => {
-    const { name, email, password } = req.body;
+const athleteController = {
+  getAllAthletes: async (req, res) => {
     try {
-      const userId = await User.create({ name, email, password });
-      res.status(201).json({ message: 'Usuario registrado', userId });
+      const [rows] = await pool.query('SELECT * FROM athletes');
+      res.json(rows);
     } catch (error) {
-      res.status(500).json({ error: 'Error al registrar usuario' });
+      res.status(500).json({ error: 'Error al obtener atletas' });
     }
   },
 
-  login: async (req, res) => {
-    const { email, password } = req.body;
+  createAthlete: async (req, res) => {
+    const { name, age, gender, category_id } = req.body;
     try {
-      const user = await User.findByEmail(email);
-      if (!user || user.password !== password) {
-        return res.status(401).json({ error: 'Credenciales inválidas' });
-      }
-      const token = jwt.sign({ userId: user.id }, '1234567890', { expiresIn: '1h' });
-      res.json({ token });
+      const [result] = await pool.query(
+        'INSERT INTO athletes (name, age, gender, category_id) VALUES (?, ?, ?, ?)',
+        [name, age, gender, category_id]
+      );
+      res.status(201).json({ message: 'Atleta creado', id: result.insertId });
     } catch (error) {
-      res.status(500).json({ error: 'Error al iniciar sesión' });
+      res.status(500).json({ error: 'Error al crear atleta' });
     }
   },
+
+  updateAthlete: async (req, res) => {
+    const { id } = req.params;
+    const { name, age, gender, category_id } = req.body;
+    try {
+      await pool.query(
+        'UPDATE athletes SET name = ?, age = ?, gender = ?, category_id = ? WHERE id = ?',
+        [name, age, gender, category_id, id]
+      );
+      res.json({ message: 'Atleta actualizado' });
+    } catch (error) {
+      res.status(500).json({ error: 'Error al actualizar atleta' });
+    }
+  },
+
+  deleteAthlete: async (req, res) => {
+    const { id } = req.params;
+    try {
+      await pool.query('DELETE FROM athletes WHERE id = ?', [id]);
+      res.json({ message: 'Atleta eliminado' });
+    } catch (error) {
+      res.status(500).json({ error: 'Error al eliminar atleta' });
+    }
+  },
+
+  getAthletesByCategory: async (req, res) => {
+    const { category_id } = req.params;
+    try {
+      const [rows] = await pool.query('SELECT * FROM athletes WHERE category_id = ?', [category_id]);
+      res.json(rows);
+    } catch (error) {
+      res.status(500).json({ error: 'Error al obtener atletas por categoría' });
+    }
+  }
 };
 
-module.exports = authController;
+module.exports = athleteController;
