@@ -42,7 +42,13 @@ const Competitions = () => {
           Nueva Competencia
         </Button>
       </div>
-      
+      <Button 
+  onClick={() => navigate('/assign-athlete')}
+  variant="secondary"
+  className="ml-2"
+>
+  Asignar Atletas
+</Button>
       <Card>
         {loading ? (
           <div className="text-center py-8">Cargando competencias...</div>

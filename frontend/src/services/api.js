@@ -10,6 +10,21 @@ const apiClient = axios.create({
   }
 });
 
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      console.error('API Error:', error.response.status, error.response.data);
+      return Promise.reject({
+        message: error.response.data?.error || 'Error en la solicitud',
+        details: error.response.data?.details,
+        status: error.response.status
+      });
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const athleteService = {
   getAll: async () => {
     const response = await apiClient.get('/athletes');
@@ -83,6 +98,18 @@ export const timeService = {
   },
   getWinnersByCompetition: async (competitionId) => {
     const response = await apiClient.get(`/times/winners/${competitionId}`);
+    return response.data;
+  },
+  assignAthleteToCompetition: async (data) => {
+    const response = await apiClient.post('/times/assign', data);
+    return response.data;
+  },
+  recordTime: async (id, time) => {
+    const response = await apiClient.put(`/times/${id}/record-time`, { time_recorded: time });
+    return response.data;
+  },
+  getByCompetition: async (competitionId) => {
+    const response = await apiClient.get(`/times/competition/${competitionId}`);
     return response.data;
   }
 };

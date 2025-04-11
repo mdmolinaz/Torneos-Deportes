@@ -22,6 +22,9 @@ const Navbar = () => {
           <Link to="/categories" className="text-gray-700 hover:text-blue-600">
             Categorías
           </Link>
+          <Link to="/assign-athlete" className="text-gray-700 hover:text-blue-600">
+            Asignaciones
+            </Link>
         </nav>
       </div>
     </header>
